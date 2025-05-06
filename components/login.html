@@ -19,9 +19,10 @@
                 <div class="form-group">
                     <label for="captcha"><i class="fas fa-shield-alt"></i></label>
                     <input type="text" id="captcha" name="captcha" placeholder="请输入验证码" maxlength="4" required>
+                    <div class="error-message" id="captcha-error"></div>
                 </div>
                 <div class="captcha-img-container">
-                    <img src="captcha.jpg" alt="验证码" id="captcha-img" onclick="refreshCaptcha()">
+                    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=" alt="验证码" id="captcha-img">
                 </div>
             </div>
             <div class="remember-me">

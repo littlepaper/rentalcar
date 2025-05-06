@@ -1,0 +1,11 @@
+/* 车辆列表组件样式 */
+.car-list-container {
+    padding: 20px;
+}
+
+.car-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+    padding: 20px 0;
+} 

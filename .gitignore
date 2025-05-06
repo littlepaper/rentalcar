@@ -56,4 +56,8 @@ config.local.js
 # 其他
 .cache/
 .temp/
-.history/ 
+.history/
+
+# Mac OS
+.AppleDouble
+.LSOverride 

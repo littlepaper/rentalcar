@@ -327,10 +327,23 @@ function updateCaptchaImage(imageUrl, imageElement) {
  * @returns {boolean} 验证是否通过
  */
 function validateCaptcha(input, errorElement, correctAnswer) {
+    // 如果错误提示元素不存在，创建一个新的
+    if (!errorElement) {
+        errorElement = document.createElement('div');
+        errorElement.id = 'captcha-error';
+        errorElement.className = 'error-message';
+        input.parentNode.appendChild(errorElement);
+    }
+
     const value = input.value.trim();
     
     if (value === '') {
         errorElement.textContent = '请输入计算结果';
+        input.classList.add('error');
+        return false;
+    } else if (!correctAnswer) {
+        // 如果没有正确答案，说明验证码未初始化
+        errorElement.textContent = '验证码未加载，请刷新';
         input.classList.add('error');
         return false;
     } else if (value !== correctAnswer) {
