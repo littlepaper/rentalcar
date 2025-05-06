@@ -16,7 +16,19 @@ export function initializeLogin() {
     const captchaInput = document.getElementById('captcha');
     const loginButton = document.getElementById('login-btn');
     const rememberCheckbox = document.getElementById('remember');
-    const refreshCaptchaButton = document.getElementById('refresh-captcha');
+    const captchaImage = document.querySelector('img[alt="验证码"]');
+    
+    // 创建刷新按钮
+    const refreshButton = document.createElement('img');
+    refreshButton.src = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxwYXRoIGQ9Ik0yMy4yIDEyYzAtMS44LS44LTMuNC0yLjItNC42QzE5LjIgNS44IDE2LjggNSAxNC4zIDVjLTMuMiAwLTYuMSAxLjktNy4zIDQuOEw2IDExIj48L3BhdGg+PHBhdGggZD0iTTIgMTQuM2MwIDEuOC44IDMuNCAyLjIgNC42IDEuOCAxLjYgNC4yIDIuNCA2LjcgMi40IDMuMiAwIDYuMS0xLjkgNy4zLTQuOGwxLTEuMiI+PC9wYXRoPjxwYXRoIGQ9Ik0yIDEyaDRsLTQtNHY0eiI+PC9wYXRoPjxwYXRoIGQ9Ik0yMiAxMmgtNGw0IDR2LTR6Ij48L3BhdGg+PC9zdmc+';
+    refreshButton.alt = '刷新验证码';
+    refreshButton.style.cssText = 'cursor:pointer;width:20px;height:20px;margin-left:5px;vertical-align:middle;';
+    refreshButton.title = '点击刷新验证码';
+    
+    // 将刷新按钮插入到验证码图片后面
+    if (captchaImage && captchaImage.parentNode) {
+        captchaImage.parentNode.insertBefore(refreshButton, captchaImage.nextSibling);
+    }
     
     // 错误信息元素
     const usernameError = document.getElementById('username-error');
@@ -29,13 +41,28 @@ export function initializeLogin() {
     captchaInput.addEventListener('input', () => validateCaptcha(captchaInput, captchaError));
     
     // 初始化验证码
-    let captchaText = generateCaptcha();
+    let captchaData = generateCaptcha();
+    updateCaptchaImage(captchaData.imageUrl, captchaImage);
     
-    // 刷新验证码按钮点击事件
-    refreshCaptchaButton.addEventListener('click', () => {
-        captchaText = generateCaptcha();
+    // 刷新按钮点击事件
+    refreshButton.addEventListener('click', () => {
+        captchaData = generateCaptcha();
+        updateCaptchaImage(captchaData.imageUrl, captchaImage);
         captchaInput.value = '';
         validateCaptcha(captchaInput, captchaError);
+        
+        // 添加旋转动画效果
+        refreshButton.style.transform = 'rotate(360deg)';
+        refreshButton.style.transition = 'transform 0.5s';
+        setTimeout(() => {
+            refreshButton.style.transform = '';
+            refreshButton.style.transition = '';
+        }, 500);
+    });
+    
+    // 验证码图片点击刷新
+    captchaImage.addEventListener('click', () => {
+        refreshButton.click(); // 触发刷新按钮的点击事件
     });
     
     // 登录按钮点击事件
@@ -43,7 +70,7 @@ export function initializeLogin() {
         // 验证表单
         const isUsernameValid = validateUsername(usernameInput, usernameError);
         const isPasswordValid = validatePassword(passwordInput, passwordError);
-        const isCaptchaValid = validateCaptcha(captchaInput, captchaError, captchaText);
+        const isCaptchaValid = validateCaptcha(captchaInput, captchaError, captchaData.answer);
         
         // 如果验证通过，提交表单
         if (isUsernameValid && isPasswordValid && isCaptchaValid) {
@@ -200,103 +227,114 @@ function loadHomePage() {
 }
 
 /**
- * 生成随机验证码
- * 生成4位随机字符的验证码并绘制到canvas上
- * @returns {string} 生成的验证码文本
+ * 生成计算式验证码
+ * 生成简单的数学计算题作为验证码并转换为图片URL
+ * @returns {Object} 包含验证码图片URL和正确答案的对象
  */
 function generateCaptcha() {
-    const canvas = document.getElementById('captcha-canvas');
+    // 创建临时canvas
+    const canvas = document.createElement('canvas');
+    canvas.width = 120;  // 设置合适的宽度
+    canvas.height = 40;  // 设置合适的高度
     const ctx = canvas.getContext('2d');
-    const captchaLength = 4;
-    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789';
-    let captchaText = '';
     
-    // 清空画布
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    // 生成两个随机数和运算符
+    const num1 = Math.floor(Math.random() * 20) + 1;
+    const num2 = Math.floor(Math.random() * 10) + 1;
+    const operators = ['+', '-', '×'];
+    const operator = operators[Math.floor(Math.random() * operators.length)];
+    
+    // 计算正确答案
+    let answer;
+    switch(operator) {
+        case '+':
+            answer = num1 + num2;
+            break;
+        case '-':
+            answer = num1 - num2;
+            break;
+        case '×':
+            answer = num1 * num2;
+            break;
+    }
+    
+    // 构造计算式
+    const captchaText = `${num1}${operator}${num2}=?`;
     
     // 设置背景
     ctx.fillStyle = '#f8f8f8';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     
-    // 生成随机验证码
-    for (let i = 0; i < captchaLength; i++) {
-        const randomIndex = Math.floor(Math.random() * chars.length);
-        captchaText += chars[randomIndex];
-    }
-    
-    // 绘制验证码
-    ctx.font = 'bold 24px Arial';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    
     // 绘制干扰线
-    for (let i = 0; i < 6; i++) {
-        ctx.strokeStyle = getRandomColor(150, 200);
+    for (let i = 0; i < 3; i++) {
+        ctx.strokeStyle = `rgba(${Math.random() * 100 + 150}, ${Math.random() * 100 + 150}, ${Math.random() * 100 + 150}, 0.2)`;
         ctx.beginPath();
         ctx.moveTo(Math.random() * canvas.width, Math.random() * canvas.height);
         ctx.lineTo(Math.random() * canvas.width, Math.random() * canvas.height);
         ctx.stroke();
     }
     
-    // 绘制干扰点
-    for (let i = 0; i < 30; i++) {
-        ctx.fillStyle = getRandomColor(150, 200);
-        ctx.beginPath();
-        ctx.arc(Math.random() * canvas.width, Math.random() * canvas.height, 1, 0, 2 * Math.PI);
-        ctx.fill();
-    }
-    
     // 绘制验证码文字
-    for (let i = 0; i < captchaLength; i++) {
-        const x = (i + 0.5) * (canvas.width / captchaLength);
-        const y = canvas.height / 2 + Math.random() * 8 - 4;
-        const angle = Math.random() * 0.4 - 0.2;
+    ctx.font = 'bold 24px Arial';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillStyle = '#333';
+    
+    // 为每个字符添加随机偏移和旋转
+    const chars = captchaText.split('');
+    const charWidth = canvas.width / (chars.length + 2);
+    
+    chars.forEach((char, i) => {
+        const x = charWidth * (i + 1.5);
+        const y = canvas.height / 2 + (Math.random() * 6 - 3);
+        const angle = Math.random() * 0.2 - 0.1;
         
         ctx.save();
         ctx.translate(x, y);
         ctx.rotate(angle);
-        ctx.fillStyle = getRandomColor(10, 100);
-        ctx.fillText(captchaText[i], 0, 0);
+        ctx.fillStyle = `hsl(${Math.random() * 360}, 70%, 40%)`;
+        ctx.fillText(char, 0, 0);
         ctx.restore();
-    }
+    });
     
-    console.log('生成的验证码:', captchaText); // 开发环境调试用，生产环境应移除
-    return captchaText;
+    // 转换canvas为图片URL
+    const imageUrl = canvas.toDataURL('image/png');
+    
+    return {
+        imageUrl: imageUrl,
+        answer: answer.toString()
+    };
 }
 
 /**
- * 获取随机颜色
- * @param {number} min - 颜色最小值
- * @param {number} max - 颜色最大值
- * @returns {string} 随机颜色
+ * 更新验证码图片
+ * @param {string} imageUrl - 验证码图片的URL
+ * @param {HTMLImageElement} imageElement - 验证码图片元素
  */
-function getRandomColor(min, max) {
-    const r = Math.floor(Math.random() * (max - min) + min);
-    const g = Math.floor(Math.random() * (max - min) + min);
-    const b = Math.floor(Math.random() * (max - min) + min);
-    return `rgb(${r},${g},${b})`;
+function updateCaptchaImage(imageUrl, imageElement) {
+    if (imageElement) {
+        imageElement.src = imageUrl;
+        imageElement.style.cursor = 'pointer';
+        imageElement.title = '点击刷新验证码';
+    }
 }
 
 /**
  * 验证验证码
  * @param {HTMLInputElement} input - 验证码输入框元素
  * @param {HTMLElement} errorElement - 错误信息显示元素
- * @param {string} correctCaptcha - 正确的验证码
+ * @param {string} correctAnswer - 正确的验证码答案
  * @returns {boolean} 验证是否通过
  */
-function validateCaptcha(input, errorElement, correctCaptcha) {
+function validateCaptcha(input, errorElement, correctAnswer) {
     const value = input.value.trim();
     
     if (value === '') {
-        errorElement.textContent = '验证码不能为空';
+        errorElement.textContent = '请输入计算结果';
         input.classList.add('error');
         return false;
-    } else if (value.length < 4) {
-        errorElement.textContent = '验证码长度不正确';
-        input.classList.add('error');
-        return false;
-    } else if (correctCaptcha && value.toLowerCase() !== correctCaptcha.toLowerCase()) {
-        errorElement.textContent = '验证码不正确';
+    } else if (value !== correctAnswer) {
+        errorElement.textContent = '计算结果不正确';
         input.classList.add('error');
         return false;
     } else {
