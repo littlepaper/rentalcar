@@ -4,6 +4,7 @@
  */
 
 import { initializeMenu } from './components/menu.js';
+import { DepartmentManager } from './components/department.js';
 
 /**
  * 初始化应用程序
@@ -20,6 +21,10 @@ async function initializeApp() {
         // 初始化菜单功能
         initializeMenu();
         initializeMenuToggle();
+        
+        // 初始化部门管理模块
+        const departmentManager = new DepartmentManager();
+        departmentManager.init();
     } catch (error) {
         console.error('加载菜单失败:', error);
     }

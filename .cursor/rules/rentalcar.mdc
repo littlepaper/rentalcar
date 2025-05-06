@@ -17,7 +17,9 @@ alwaysApply: true
 - `index.html` - 项目主入口页面
 - `css/` - CSS样式文件目录
   - `styles.css` - 自定义样式
+  - `components/` - 各模块对应的样式文件
 - `js/` - JavaScript文件目录
   - `main.js` - 主要JavaScript逻辑
+  - `components/` - 各模块对应的js文件逻辑
 - `img/` - 图片资源目录
 - `components/` - 主业务逻辑对应的html文件
