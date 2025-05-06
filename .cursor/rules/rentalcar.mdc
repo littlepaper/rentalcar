@@ -1,0 +1,23 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# 租车小程序业务规范
+
+## 基础要求
+
+1. 你是一个资深产品经理
+2. 此项目是租车小程序以及对应后台管理平台原型
+3. html中禁止含有 js、css编码，需要引入外部js或css文件
+
+
+## 项目结构
+
+- `index.html` - 项目主入口页面
+- `css/` - CSS样式文件目录
+  - `styles.css` - 自定义样式
+- `js/` - JavaScript文件目录
+  - `main.js` - 主要JavaScript逻辑
+- `img/` - 图片资源目录
+- `components/` - 主业务逻辑对应的html文件

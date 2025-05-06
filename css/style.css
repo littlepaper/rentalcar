@@ -1,0 +1,275 @@
+/* 导入组件样式 */
+@import 'components/home.css';
+@import 'components/login.css';
+
+/* 全局样式 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    background-color: #f5f6fa;
+    min-height: 100vh;
+    position: relative;
+}
+
+/* 主布局 */
+.container {
+    display: flex;
+    min-height: 100vh;
+    position: relative;
+}
+
+/* 侧边栏样式 */
+.sidebar {
+    width: 260px;
+    background-color: #1e2b3c;
+    color: #fff;
+    height: 100vh;
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* 系统标题样式 */
+.sidebar-header {
+    background-color: #1e2b3c;
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    height: 60px;
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo-container i {
+    font-size: 24px;
+    color: #4CAF50;
+}
+
+.sidebar-header h1 {
+    font-size: 18px;
+    font-weight: 500;
+    color: #fff;
+    margin: 0;
+}
+
+/* 导航菜单样式 */
+.sidebar-nav {
+    padding: 10px 0;
+    height: calc(100vh - 60px);
+    overflow-y: auto;
+}
+
+.sidebar-nav ul {
+    list-style: none;
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 20px;
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.nav-item:hover {
+    color: #fff;
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.nav-item.active {
+    color: #fff;
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.nav-item i {
+    width: 20px;
+    margin-right: 10px;
+    font-size: 16px;
+}
+
+/* 子菜单样式 */
+.has-submenu {
+    cursor: pointer;
+}
+
+.submenu-icon {
+    position: absolute;
+    right: 15px;
+    transition: transform 0.3s ease;
+    font-size: 12px !important;
+}
+
+.has-submenu.open .submenu-icon {
+    transform: rotate(90deg);
+}
+
+.submenu {
+    display: block;
+    background-color: rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 0.3s ease;
+}
+
+.submenu.open {
+    max-height: 1000px; /* 设置一个足够大的值以确保子菜单能完全展开 */
+}
+
+.submenu .nav-item {
+    padding: 10px 20px 10px 50px;
+    font-size: 14px;
+}
+
+.submenu .nav-item i {
+    font-size: 14px;
+    width: 16px;
+}
+
+/* 主内容区域 */
+.main-content {
+    flex: 1;
+    margin-left: 260px;
+    padding: 20px;
+    background-color: #f5f6fa;
+    min-height: 100vh;
+    position: relative;
+    z-index: 1;
+}
+
+/* 折叠按钮样式 */
+.toggle-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border: none;
+    color: #fff;
+    width: 32px;
+    height: 32px;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.toggle-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* 滚动条样式 */
+.sidebar-nav::-webkit-scrollbar {
+    width: 4px;
+}
+
+.sidebar-nav::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.sidebar-nav::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+}
+
+.sidebar-nav::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* 折叠状态 */
+.sidebar.collapsed {
+    width: 70px;
+}
+
+.sidebar.collapsed .logo-container h1,
+.sidebar.collapsed .nav-text,
+.sidebar.collapsed .submenu-icon {
+    display: none;
+}
+
+.sidebar.collapsed .submenu {
+    position: absolute;
+    left: 70px;
+    top: 0;
+    width: 200px;
+    background-color: #1e2b3c;
+    display: none;
+    padding-left: 0;
+    box-shadow: 4px 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar.collapsed .has-submenu:hover .submenu {
+    display: block;
+}
+
+.sidebar.collapsed + .main-content {
+    margin-left: 70px;
+}
+
+.sidebar.collapsed .nav-item {
+    padding: 12px;
+    justify-content: center;
+}
+
+.sidebar.collapsed .nav-item i {
+    margin: 0;
+    font-size: 18px;
+}
+
+.sidebar.collapsed .submenu .nav-item {
+    padding: 12px 20px;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 70px;
+    }
+    
+    .logo-container h1,
+    .nav-text,
+    .submenu-icon {
+        display: none;
+    }
+    
+    .nav-item {
+        padding: 12px;
+        justify-content: center;
+    }
+    
+    .nav-item i {
+        margin: 0;
+        font-size: 18px;
+    }
+    
+    .main-content {
+        margin-left: 70px;
+    }
+    
+    .submenu {
+        position: absolute;
+        left: 70px;
+        top: 0;
+        width: 200px;
+        background-color: #1e2b3c;
+        display: none;
+        padding-left: 0;
+        box-shadow: 4px 0 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    .has-submenu:hover .submenu {
+        display: block;
+    }
+}
