@@ -185,6 +185,48 @@ function setupActiveMenuItem() {
         });
     }
     
+    // 用户管理菜单点击事件
+    const userLink = Array.from(document.querySelectorAll('.nav-item:not(.has-submenu) .nav-text')).find(el => el.textContent.includes('用户管理'))?.closest('.nav-item');
+    if (userLink) {
+        userLink.addEventListener('click', async (e) => {
+            e.preventDefault();
+            try {
+                // 加载用户管理组件
+                const response = await fetch('components/user.html');
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                const html = await response.text();
+                document.querySelector('.main-content').innerHTML = html;
+                
+                // 动态加载user.js并初始化用户管理功能
+                const userScript = document.createElement('script');
+                userScript.type = 'module';
+                userScript.src = 'js/components/user.js';
+                document.body.appendChild(userScript);
+
+                // 动态加载user.css
+                if (!document.querySelector('link[href="css/components/user.css"]')) {
+                    const userStyle = document.createElement('link');
+                    userStyle.rel = 'stylesheet';
+                    userStyle.href = 'css/components/user.css';
+                    document.head.appendChild(userStyle);
+                }
+
+                // 初始化用户管理模块
+                userScript.onload = () => {
+                    import('./user.js').then(module => {
+                        const userManager = new module.UserManager();
+                        userManager.init();
+                    }).catch(error => {
+                        console.error('加载用户管理模块失败:', error);
+                    });
+                };
+            } catch (error) {
+                console.error('加载用户管理页面失败:', error);
+                document.querySelector('.main-content').innerHTML = '<p>加载用户管理页面失败，请稍后再试</p>';
+            }
+        });
+    }
+    
     // 部门管理菜单点击事件
     const departmentLink = Array.from(document.querySelectorAll('.nav-item:not(.has-submenu) .nav-text')).find(el => el.textContent.includes('部门管理'))?.closest('.nav-item');
     if (departmentLink) {
