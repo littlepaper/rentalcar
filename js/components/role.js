@@ -5,142 +5,159 @@
 // 角色数据管理类
 export class RoleManager {
     constructor() {
-        this.initEventListeners();
-        this.loadRoleData();
+        this.init();
     }
 
     /**
-     * 初始化事件监听器
+     * 初始化
      */
-    initEventListeners() {
-        // 搜索按钮事件
-        document.getElementById('searchBtn').addEventListener('click', () => this.handleSearch());
-        
-        // 重置按钮事件
-        document.getElementById('resetBtn').addEventListener('click', () => this.handleReset());
-        
-        // 新增按钮事件
-        document.getElementById('addRole').addEventListener('click', () => this.handleAdd());
-        
-        // 导出按钮事件
-        document.getElementById('exportRole').addEventListener('click', () => this.handleExport());
+    init() {
+        this.initElements();
+        this.bindEvents();
+        this.loadRoleList();
     }
 
     /**
-     * 加载角色数据
+     * 初始化元素
      */
-    async loadRoleData() {
-        try {
-            // 模拟API调用
-            const mockData = [
-                {
-                    id: '100',
-                    name: '业务管理员',
-                    auth: '业务管理员',
-                    order: 0,
-                    status: 1,
-                    createTime: '2024-12-21 10:23:29'
-                },
-                {
-                    id: '1',
-                    name: '超级管理员',
-                    auth: 'admin',
-                    order: 1,
-                    status: 1,
-                    createTime: '2024-12-20 18:21:35'
-                },
-                {
-                    id: '2',
-                    name: '普通角色',
-                    auth: 'common',
-                    order: 2,
-                    status: 1,
-                    createTime: '2024-12-20 18:21:36'
-                }
-            ];
-            
-            this.renderTable(mockData);
-        } catch (error) {
-            console.error('加载角色数据失败:', error);
-            this.showMessage('加载角色数据失败', 'error');
-        }
+    initElements() {
+        this.tableBody = document.getElementById('roleTableBody');
+        // ... 其他元素初始化
     }
 
     /**
-     * 渲染表格数据
-     * @param {Array} data - 角色数据数组
+     * 绑定事件
      */
-    renderTable(data) {
-        const tbody = document.getElementById('roleTableBody');
-        tbody.innerHTML = data.map(role => `
+    bindEvents() {
+        // 表格操作事件委托
+        this.tableBody.addEventListener('click', (e) => {
+            const target = e.target;
+            const roleId = target.dataset.id;
+
+            if (target.classList.contains('btn-edit')) {
+                this.handleEdit(roleId);
+            } else if (target.classList.contains('btn-delete')) {
+                this.handleDelete(roleId);
+            } else if (target.classList.contains('btn-more')) {
+                this.toggleDropdownMenu(target);
+            }
+        });
+
+        // 点击其他地方关闭下拉菜单
+        document.addEventListener('click', (e) => {
+            if (!e.target.classList.contains('btn-more')) {
+                this.closeAllDropdownMenus();
+            }
+        });
+    }
+
+    /**
+     * 加载角色列表
+     */
+    loadRoleList() {
+        // 模拟数据，实际项目中应该从后端获取
+        const roles = [
+            {
+                id: 100,
+                name: '业务管理员',
+                auth: '业务管理员',
+                order: 0,
+                status: true,
+                createTime: '2024-12-21 10:23:29'
+            },
+            {
+                id: 1,
+                name: '超级管理员',
+                auth: 'admin',
+                order: 1,
+                status: true,
+                createTime: '2024-12-20 18:21:35'
+            },
+            {
+                id: 2,
+                name: '普通角色',
+                auth: 'common',
+                order: 2,
+                status: true,
+                createTime: '2024-12-20 18:21:36'
+            }
+        ];
+
+        this.renderTable(roles);
+    }
+
+    /**
+     * 渲染表格
+     */
+    renderTable(roles) {
+        this.tableBody.innerHTML = roles.map(role => `
             <tr>
                 <td>${role.id}</td>
                 <td>${role.name}</td>
                 <td>${role.auth}</td>
                 <td>${role.order}</td>
                 <td>
-                    <span class="status-badge ${role.status ? 'active' : 'inactive'}">
-                        ${role.status ? '正常' : '停用'}
-                    </span>
+                    <label class="status-switch">
+                        <input type="checkbox" ${role.status ? 'checked' : ''}>
+                        <span class="slider"></span>
+                    </label>
                 </td>
                 <td>${role.createTime}</td>
+                <td class="operation-cell">
+                    <button class="btn-edit" data-id="${role.id}">修改</button>
+                    <button class="btn-delete" data-id="${role.id}">删除</button>
+                    <div class="dropdown">
+                        <button class="btn-more" data-id="${role.id}">更多</button>
+                        <div class="dropdown-menu" id="dropdown-${role.id}">
+                            <button class="menu-item" data-action="permission" data-id="${role.id}">数据权限</button>
+                            <button class="menu-item" data-action="users" data-id="${role.id}">分配用户</button>
+                        </div>
+                    </div>
+                </td>
             </tr>
         `).join('');
     }
 
     /**
-     * 处理搜索事件
+     * 处理编辑
      */
-    handleSearch() {
-        const searchParams = {
-            roleName: document.getElementById('roleName').value,
-            roleAuth: document.getElementById('roleAuth').value,
-            status: document.getElementById('roleStatus').value,
-            startDate: document.getElementById('startDate').value,
-            endDate: document.getElementById('endDate').value
-        };
+    handleEdit(roleId) {
+        console.log('编辑角色:', roleId);
+        // TODO: 实现编辑功能
+    }
+
+    /**
+     * 处理删除
+     */
+    handleDelete(roleId) {
+        if (confirm('确认要删除该角色吗？')) {
+            console.log('删除角色:', roleId);
+            // TODO: 实现删除功能
+        }
+    }
+
+    /**
+     * 切换下拉菜单
+     */
+    toggleDropdownMenu(target) {
+        const roleId = target.dataset.id;
+        const menu = document.getElementById(`dropdown-${roleId}`);
         
-        console.log('搜索参数:', searchParams);
-        // TODO: 实现搜索逻辑
-        this.loadRoleData(); // 临时重新加载数据
-    }
-
-    /**
-     * 处理重置事件
-     */
-    handleReset() {
-        document.getElementById('roleName').value = '';
-        document.getElementById('roleAuth').value = '';
-        document.getElementById('roleStatus').value = '';
-        document.getElementById('startDate').value = '';
-        document.getElementById('endDate').value = '';
+        // 先关闭所有其他的下拉菜单
+        this.closeAllDropdownMenus();
         
-        this.loadRoleData();
+        // 切换当前下拉菜单
+        if (menu) {
+            menu.classList.toggle('show');
+        }
     }
 
     /**
-     * 处理新增角色事件
+     * 关闭所有下拉菜单
      */
-    handleAdd() {
-        // TODO: 实现新增角色逻辑
-        console.log('新增角色');
-    }
-
-    /**
-     * 处理导出事件
-     */
-    handleExport() {
-        // TODO: 实现导出逻辑
-        console.log('导出角色数据');
-    }
-
-    /**
-     * 显示消息提示
-     * @param {string} message - 消息内容
-     * @param {string} type - 消息类型（success/error/warning/info）
-     */
-    showMessage(message, type = 'info') {
-        // TODO: 实现消息提示逻辑
-        console.log(`${type}: ${message}`);
+    closeAllDropdownMenus() {
+        document.querySelectorAll('.dropdown-menu').forEach(menu => {
+            menu.classList.remove('show');
+        });
     }
 } 

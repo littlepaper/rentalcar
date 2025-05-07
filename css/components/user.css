@@ -6,25 +6,35 @@
 
 /* 搜索区域样式 */
 .search-wrapper {
-    display: flex;
-    justify-content: space-between;
     margin-bottom: 20px;
     padding: 15px;
     background-color: #f8f9fa;
     border-radius: 4px;
+    border: 1px solid #e4e7ed;
 }
 
 .search-area {
     display: flex;
+    align-items: center;
     gap: 10px;
 }
 
 .search-input {
-    width: 200px;
+    width: 180px;
     height: 32px;
-    padding: 0 10px;
+    padding: 0 12px;
     border: 1px solid #dcdfe6;
     border-radius: 4px;
+    transition: border-color 0.2s;
+}
+
+.search-input:hover {
+    border-color: #c0c4cc;
+}
+
+.search-input:focus {
+    border-color: #409eff;
+    outline: none;
 }
 
 .status-select {
@@ -32,51 +42,85 @@
     height: 32px;
     border: 1px solid #dcdfe6;
     border-radius: 4px;
+    padding: 0 12px;
+    transition: border-color 0.2s;
 }
 
-.search-btn,
-.reset-btn {
-    padding: 0 15px;
+.status-select:hover {
+    border-color: #c0c4cc;
+}
+
+.status-select:focus {
+    border-color: #409eff;
+    outline: none;
+}
+
+/* 按钮组样式 */
+.button-group {
+    display: flex;
+    gap: 8px;
+    margin-left: auto; /* 使按钮组靠右对齐 */
+}
+
+/* 按钮基础样式 */
+.btn-search,
+.btn-reset,
+.btn-add,
+.btn-export {
+    min-width: 80px;
     height: 32px;
-    border: none;
+    padding: 0 15px;
     border-radius: 4px;
+    border: none;
     cursor: pointer;
+    font-size: 14px;
+    transition: all 0.3s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.search-btn {
+/* 搜索按钮 */
+.btn-search {
     background-color: #409eff;
-    color: #fff;
+    color: white;
 }
 
-.reset-btn {
+.btn-search:hover {
+    background-color: #66b1ff;
+}
+
+/* 重置按钮 */
+.btn-reset {
     background-color: #fff;
     border: 1px solid #dcdfe6;
     color: #606266;
 }
 
-.operation-area {
-    display: flex;
-    gap: 10px;
+.btn-reset:hover {
+    color: #409eff;
+    border-color: #c6e2ff;
+    background-color: #ecf5ff;
 }
 
-.operation-area button {
-    padding: 0 15px;
-    height: 32px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
+/* 新增按钮 */
 .btn-add {
     background-color: #67c23a;
-    color: #fff;
+    color: white;
 }
 
-.btn-import,
+.btn-add:hover {
+    background-color: #85ce61;
+}
+
+/* 导出按钮 */
 .btn-export {
-    background-color: #fff;
-    border: 1px solid #dcdfe6;
-    color: #606266;
+    background-color: #909399;
+    color: white;
+}
+
+.btn-export:hover {
+    background-color: #a6a9ad;
 }
 
 /* 表格样式 */
@@ -237,4 +281,35 @@ tbody tr:hover {
     background-color: #409eff;
     border: none;
     color: #fff;
+}
+
+/* 表格操作按钮样式 */
+.table-wrapper .btn-edit,
+.table-wrapper .btn-delete,
+.table-wrapper .btn-reset-pwd {
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0 8px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: opacity 0.3s;
+}
+
+.table-wrapper .btn-edit {
+    color: #409eff;  /* 蓝色 */
+}
+
+.table-wrapper .btn-delete {
+    color: #f56c6c;  /* 红色 */
+}
+
+.table-wrapper .btn-reset-pwd {
+    color: #67c23a;  /* 绿色 */
+}
+
+.table-wrapper .btn-edit:hover,
+.table-wrapper .btn-delete:hover,
+.table-wrapper .btn-reset-pwd:hover {
+    opacity: 0.8;
 } 

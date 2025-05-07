@@ -30,8 +30,8 @@ export class UserManager {
         this.searchInput = document.querySelector('input[placeholder="请输入用户名称"]');
         this.phoneInput = document.querySelector('input[placeholder="请输入手机号码"]');
         this.statusSelect = document.querySelector('.status-select');
-        this.searchBtn = document.querySelector('.search-btn');
-        this.resetBtn = document.querySelector('.reset-btn');
+        this.searchBtn = document.querySelector('.btn-search');
+        this.resetBtn = document.querySelector('.btn-reset');
 
         // 操作区域元素
         this.addBtn = document.querySelector('.btn-add');
@@ -159,10 +159,10 @@ export class UserManager {
                     </span>
                 </td>
                 <td>${user.createTime}</td>
-                <td>
-                    <button class="btn-edit" data-id="${user.id}">编辑</button>
+                <td class="operation-cell">
+                    <button class="btn-edit" data-id="${user.id}">修改</button>
+                    <button class="btn-reset-pwd" data-id="${user.id}">新增</button>
                     <button class="btn-delete" data-id="${user.id}">删除</button>
-                    <button class="btn-reset-pwd" data-id="${user.id}">重置密码</button>
                 </td>
             </tr>
         `).join('');

@@ -27,23 +27,23 @@
                         <option value="0">停用</option>
                     </select>
                 </div>
-                <div class="search-item">
+                <div class="search-item date-range">
                     <span>创建时间</span>
                     <input type="date" id="startDate">
-                    <span>-</span>
+                    <span class="separator">至</span>
                     <input type="date" id="endDate">
                 </div>
             </div>
-            <div class="operation-area">
-                <button class="btn-search" id="searchBtn">搜索</button>
-                <button class="btn-reset" id="resetBtn">重置</button>
+            <div class="button-group">
+                <div class="search-buttons">
+                    <button class="btn-search" id="searchBtn">搜索</button>
+                    <button class="btn-reset" id="resetBtn">重置</button>
+                </div>
+                <div class="operation-buttons">
+                    <button class="btn-add" id="addRole">新增</button>
+                    <button class="btn-export" id="exportRole">导出</button>
+                </div>
             </div>
-        </div>
-
-        <!-- 工具栏 -->
-        <div class="role-toolbar">
-            <button class="btn-add" id="addRole">新增</button>
-            <button class="btn-export" id="exportRole">导出</button>
         </div>
 
         <!-- 表格区域 -->
@@ -57,6 +57,7 @@
                         <th>显示顺序</th>
                         <th>状态</th>
                         <th>创建时间</th>
+                        <th>操作</th>
                     </tr>
                 </thead>
                 <tbody id="roleTableBody">
