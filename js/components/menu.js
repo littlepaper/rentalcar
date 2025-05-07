@@ -281,11 +281,6 @@ function setupActiveMenuItem() {
                 const html = await response.text();
                 document.querySelector('.main-content').innerHTML = html;
                 
-                // 动态加载role.js
-                const roleScript = document.createElement('script');
-                roleScript.src = 'js/components/role.js';
-                document.body.appendChild(roleScript);
-                
                 // 动态加载role.css
                 if (!document.querySelector('link[href="css/components/role.css"]')) {
                     const roleStyle = document.createElement('link');
@@ -293,6 +288,13 @@ function setupActiveMenuItem() {
                     roleStyle.href = 'css/components/role.css';
                     document.head.appendChild(roleStyle);
                 }
+
+                // 动态import role.js并实例化
+                import('/js/components/role.js').then(module => {
+                    new module.RoleManager();
+                }).catch(error => {
+                    console.error('加载角色管理模块失败:', error);
+                });
             } catch (error) {
                 console.error('加载角色管理页面失败:', error);
                 document.querySelector('.main-content').innerHTML = '<p>加载角色管理页面失败，请稍后再试</p>';

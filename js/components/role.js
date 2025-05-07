@@ -3,7 +3,7 @@
  */
 
 // 角色数据管理类
-class RoleManager {
+export class RoleManager {
     constructor() {
         this.initEventListeners();
         this.loadRoleData();
@@ -143,7 +143,4 @@ class RoleManager {
         // TODO: 实现消息提示逻辑
         console.log(`${type}: ${message}`);
     }
-}
-
-// 初始化角色管理器
-const roleManager = new RoleManager(); 
+} 
