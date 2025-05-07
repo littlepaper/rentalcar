@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>角色管理</title>
+    <link rel="stylesheet" href="../css/components/role.css">
+</head>
+<body>
+    <div class="role-container">
+        <!-- 搜索和操作区域 -->
+        <div class="role-header">
+            <div class="search-area">
+                <div class="search-item">
+                    <span>角色名称</span>
+                    <input type="text" id="roleName" placeholder="请输入角色名称">
+                </div>
+                <div class="search-item">
+                    <span>权限字符</span>
+                    <input type="text" id="roleAuth" placeholder="请输入权限字符">
+                </div>
+                <div class="search-item">
+                    <span>状态</span>
+                    <select id="roleStatus">
+                        <option value="">全部</option>
+                        <option value="1">正常</option>
+                        <option value="0">停用</option>
+                    </select>
+                </div>
+                <div class="search-item">
+                    <span>创建时间</span>
+                    <input type="date" id="startDate">
+                    <span>-</span>
+                    <input type="date" id="endDate">
+                </div>
+            </div>
+            <div class="operation-area">
+                <button class="btn-search" id="searchBtn">搜索</button>
+                <button class="btn-reset" id="resetBtn">重置</button>
+            </div>
+        </div>
+
+        <!-- 工具栏 -->
+        <div class="role-toolbar">
+            <button class="btn-add" id="addRole">新增</button>
+            <button class="btn-export" id="exportRole">导出</button>
+        </div>
+
+        <!-- 表格区域 -->
+        <div class="role-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>角色编号</th>
+                        <th>角色名称</th>
+                        <th>权限字符</th>
+                        <th>显示顺序</th>
+                        <th>状态</th>
+                        <th>创建时间</th>
+                    </tr>
+                </thead>
+                <tbody id="roleTableBody">
+                    <!-- 表格数据将通过JavaScript动态填充 -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 分页区域 -->
+        <div class="pagination">
+            <span class="total">共 3 条</span>
+            <select class="page-size">
+                <option value="10">10条/页</option>
+                <option value="20">20条/页</option>
+                <option value="30">30条/页</option>
+            </select>
+            <div class="page-nav">
+                <button class="prev">上一页</button>
+                <div class="page-numbers">
+                    <span class="current">1</span>
+                    <span>2</span>
+                </div>
+                <button class="next">下一页</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/components/role.js"></script>
+</body>
+</html> 

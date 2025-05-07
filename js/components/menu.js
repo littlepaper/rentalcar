@@ -239,22 +239,14 @@ function setupActiveMenuItem() {
                 const html = await response.text();
                 document.querySelector('.main-content').innerHTML = html;
                 
-                // 动态加载department.js并初始化部门管理功能
-                const departmentScript = document.createElement('script');
-                departmentScript.type = 'module';
-                departmentScript.src = 'js/components/department.js';
-                document.body.appendChild(departmentScript);
-
-                // 动态加载department.css
-                if (!document.querySelector('link[href="css/components/department.css"]')) {
-                    const departmentStyle = document.createElement('link');
-                    departmentStyle.rel = 'stylesheet';
-                    departmentStyle.href = 'css/components/department.css';
-                    document.head.appendChild(departmentStyle);
-                }
+                // 动态加载department.js
+                const deptScript = document.createElement('script');
+                deptScript.type = 'module';
+                deptScript.src = 'js/components/department.js';
+                document.body.appendChild(deptScript);
 
                 // 初始化部门管理模块
-                departmentScript.onload = () => {
+                deptScript.onload = () => {
                     import('./department.js').then(module => {
                         const departmentManager = new module.DepartmentManager();
                         departmentManager.init();
@@ -262,9 +254,48 @@ function setupActiveMenuItem() {
                         console.error('加载部门管理模块失败:', error);
                     });
                 };
+                
+                // 动态加载department.css
+                if (!document.querySelector('link[href="css/components/department.css"]')) {
+                    const deptStyle = document.createElement('link');
+                    deptStyle.rel = 'stylesheet';
+                    deptStyle.href = 'css/components/department.css';
+                    document.head.appendChild(deptStyle);
+                }
             } catch (error) {
                 console.error('加载部门管理页面失败:', error);
                 document.querySelector('.main-content').innerHTML = '<p>加载部门管理页面失败，请稍后再试</p>';
+            }
+        });
+    }
+
+    // 角色管理菜单点击事件
+    const roleLink = Array.from(document.querySelectorAll('.nav-item:not(.has-submenu) .nav-text')).find(el => el.textContent.includes('角色管理'))?.closest('.nav-item');
+    if (roleLink) {
+        roleLink.addEventListener('click', async (e) => {
+            e.preventDefault();
+            try {
+                // 加载角色管理组件
+                const response = await fetch('components/role.html');
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                const html = await response.text();
+                document.querySelector('.main-content').innerHTML = html;
+                
+                // 动态加载role.js
+                const roleScript = document.createElement('script');
+                roleScript.src = 'js/components/role.js';
+                document.body.appendChild(roleScript);
+                
+                // 动态加载role.css
+                if (!document.querySelector('link[href="css/components/role.css"]')) {
+                    const roleStyle = document.createElement('link');
+                    roleStyle.rel = 'stylesheet';
+                    roleStyle.href = 'css/components/role.css';
+                    document.head.appendChild(roleStyle);
+                }
+            } catch (error) {
+                console.error('加载角色管理页面失败:', error);
+                document.querySelector('.main-content').innerHTML = '<p>加载角色管理页面失败，请稍后再试</p>';
             }
         });
     }
